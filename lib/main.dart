@@ -1,8 +1,14 @@
+import 'package:coingen/second-page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    const ProviderScope(
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -25,7 +31,11 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(title: 'Websockets Demo'),
+      //home: MyHomePage(title: 'Websockets Demo'),
+      routes: {
+        '/': (context) => MyHomePage(title: 'WebSockets & Riverpod Demo'),
+        'second-page': (context) => SecondPage(),
+      },
     );
   }
 }
@@ -53,7 +63,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+  int counter = 0;
   final TextEditingController _controller = TextEditingController();
 
   void _incrementCounter() {
@@ -63,12 +73,12 @@ class _MyHomePageState extends State<MyHomePage> {
       // so that the display can reflect the updated values. If we changed
       // _counter without calling setState(), then the build method would not be
       // called again, and so nothing would appear to happen.
-      _counter++;
+      counter++;
     });
   }
 
   void _sendCounterToWebSockets() {
-    widget.channel.sink.add('$_counter');
+    widget.channel.sink.add('$counter');
     //widget.channel.sink.close();
   }
 
@@ -116,7 +126,7 @@ class _MyHomePageState extends State<MyHomePage> {
               'You have pushed the button this many times:',
             ),
             Text(
-              '$_counter',
+              '$counter',
             ),
             const SizedBox(
               height: 100.0,
@@ -167,6 +177,21 @@ class _MyHomePageState extends State<MyHomePage> {
                 );
               },
             ),
+            const SizedBox(
+              height: 100.0,
+            ),
+            ElevatedButton.icon(
+              icon: const Icon(Icons.arrow_forward),
+              label: const Text('Go to next page'),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => SecondPage(),
+                  ),
+                );
+              },
+            ),
           ],
         ),
       ),
@@ -180,4 +205,13 @@ class _MyHomePageState extends State<MyHomePage> {
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
+}
+
+final counterProvider = StateNotifierProvider<Counter, int>((ref) {
+  return Counter();
+});
+
+class Counter extends StateNotifier<int> {
+  Counter() : super(0);
+  void increment() => state++;
 }
