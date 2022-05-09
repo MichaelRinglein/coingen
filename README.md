@@ -4,11 +4,11 @@ A WebSockets and Riverpod demo by Michael Ringlein. Build upon the default count
 
 ## What does this do?
 
-It combines WebSockets with Riverpod. 
+It combines WebSockets with Riverpod.
 
-The the value of the counter or a custom message can be send to WebSockets. Both, counter and message, can be read using WebSockets' stream. 
+The value of the counter or a custom message can be sent to WebSockets. Both - counter and message - can be read using the WebSocket's stream.
 
-But instead of using the `StreamBuilder` to listen to new messages (via the WebSockets' stream), a `StreamProvider` from Riverpod is used instead.
+Rather than using the `StreamBuilder` to listen to new messages (via the WebSocket's stream), a `StreamProvider` from Riverpod is used instead.
 
 ## Web Demo
 
